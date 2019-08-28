@@ -3,8 +3,15 @@ import { diff } from 'deep-object-diff';
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import { Drawer, Button, Popover } from 'antd';
-import { size, omit, keyBy } from 'lodash';
+// ant design
+import Drawer from 'antd/es/drawer';
+import Button from 'antd/es/button';
+import Popover from 'antd/es/popover';
+
+//lodash
+import size from 'lodash/size';
+import omit from 'lodash/omit';
+import keyBy from 'lodash/keyBy';
 
 export default class InputSelect extends Component {
 	state = {
@@ -37,6 +44,7 @@ export default class InputSelect extends Component {
 			disabled = false,
 			options = [],
 			id,
+			action,
 			label = '',
 			multiple,
 			onChange,
@@ -64,11 +72,9 @@ export default class InputSelect extends Component {
 						onChange(id, e ? e.value : null);
 					}
 
-					if (size(diff(listObject[value], e))) {
-						this.setState({ hasChange: true });
-					} else {
-						this.setState({ hasChange: false });
-					}
+					this.setState({
+						hasChange: action === 'add' ? false : size(diff(listObject[value], e)) ? true : false
+					});
 				}}
 				options={optionList}
 				placeholder={placeholder || label || id}
@@ -137,17 +143,27 @@ export default class InputSelect extends Component {
 
 	render() {
 		const { hasChange } = this.state;
-		const { id, label = '', required = false, withLabel = false, historyTrack = false } = this.props;
+		const {
+			id,
+			action,
+			label = '',
+			required = false,
+			withLabel = false,
+			historyTrack = false,
+			showManageButton = false
+		} = this.props;
 
 		if (withLabel) {
 			if (historyTrack) {
 				return (
 					<div className="form-group">
 						<label for={id}>{required ? `*${label}` : label}</label>
-						<Button onClick={this.showDrawer} type="link">
-							Manage
-						</Button>
-						{hasChange && this.renderPopover()}
+						{showManageButton && (
+							<Button onClick={this.showDrawer} type="link">
+								Manage
+							</Button>
+						)}
+						{hasChange && action !== 'add' && this.renderPopover()}
 						{this.renderSelect()}
 						{this.renderDrawer()}
 					</div>
@@ -157,9 +173,12 @@ export default class InputSelect extends Component {
 			return (
 				<div className="form-group">
 					<label for={id}>{required ? `*${label}` : label}</label>
-					<Button onClick={this.showDrawer} type="link">
-						Manage
-					</Button>
+					{showManageButton && (
+						<Button onClick={this.showDrawer} type="link">
+							Manage
+						</Button>
+					)}
+
 					{this.renderSelect()}
 					{this.renderDrawer()}
 				</div>
@@ -168,10 +187,12 @@ export default class InputSelect extends Component {
 			if (historyTrack) {
 				return (
 					<div class="form-group">
-						<Button onClick={this.showDrawer} type="link">
-							Manage
-						</Button>
-						{hasChange && this.renderPopover()}
+						{showManageButton && (
+							<Button onClick={this.showDrawer} type="link">
+								Manage
+							</Button>
+						)}
+						{hasChange && action !== 'add' && this.renderPopover()}
 						{this.renderInput()}
 						{this.renderDrawer()}
 					</div>
@@ -180,9 +201,11 @@ export default class InputSelect extends Component {
 
 			return (
 				<div class="form-group">
-					<Button onClick={this.showDrawer} type="link">
-						Manage
-					</Button>
+					{showManageButton && (
+						<Button onClick={this.showDrawer} type="link">
+							Manage
+						</Button>
+					)}
 					{this.renderSelect()}
 					{this.renderDrawer()}
 				</div>

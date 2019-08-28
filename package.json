@@ -1,6 +1,6 @@
 {
 	"name": "@volenday/input-reference",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"license": "UNLICENSED",
 	"scripts": {
 		"dev": "webpack --progress --watch",
@@ -9,19 +9,19 @@
 	},
 	"main": "dist/index.min.js",
 	"peerDependencies": {
-		"@volenday/input-date": "^0.0.12",
-		"antd": "^3.20.1",
+		"@volenday/input-date": "^0.1.16",
+		"antd": "^3.22.2",
 		"deep-object-diff": "^1.1.0",
-		"lodash": "^4.17.14",
-		"react": "^16.8.6",
+		"lodash": "^4.17.15",
+		"react": "^16.9.0",
 		"react-select": "^3.0.4"
 	},
 	"dependencies": {
-		"@volenday/input-date": "^0.0.12",
-		"antd": "^3.20.1",
+		"@volenday/input-date": "^0.1.16",
+		"antd": "^3.22.2",
 		"deep-object-diff": "^1.1.0",
-		"lodash": "^4.17.14",
-		"react": "^16.8.6",
+		"lodash": "^4.17.15",
+		"react": "^16.9.0",
 		"react-select": "^3.0.4",
 		"webpack": "^4.35.3"
 	},
