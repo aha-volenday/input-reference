@@ -2,16 +2,14 @@ import InputDate from '@volenday/input-date';
 import { diff } from 'deep-object-diff';
 import React, { Component } from 'react';
 import Select from 'react-select';
-
-// ant design
-import Drawer from 'antd/es/drawer';
-import Button from 'antd/es/button';
-import Popover from 'antd/es/popover';
+import { Button, Drawer, Form, Popover } from 'antd';
 
 //lodash
 import size from 'lodash/size';
 import omit from 'lodash/omit';
 import keyBy from 'lodash/keyBy';
+
+import './styles.css';
 
 export default class InputSelect extends Component {
 	state = {
@@ -144,74 +142,31 @@ export default class InputSelect extends Component {
 	render() {
 		const { hasChange } = this.state;
 		const {
-			id,
 			action,
 			label = '',
-			required = false,
-			withLabel = false,
 			historyTrack = false,
-			showManageButton = false
+			required = false,
+			showManageButton = false,
+			withLabel = false
 		} = this.props;
 
-		if (withLabel) {
-			if (historyTrack) {
-				return (
-					<div className="form-group">
-						<label for={id}>{required ? `*${label}` : label}</label>
-						{showManageButton && (
-							<Button onClick={this.showDrawer} type="link">
-								Manage
-							</Button>
-						)}
-						{hasChange && action !== 'add' && this.renderPopover()}
-						{this.renderSelect()}
-						{this.renderDrawer()}
-					</div>
-				);
-			}
+		const formItemCommonProps = {
+			colon: false,
+			label: withLabel ? label : false,
+			required
+		};
 
-			return (
-				<div className="form-group">
-					<label for={id}>{required ? `*${label}` : label}</label>
-					{showManageButton && (
-						<Button onClick={this.showDrawer} type="link">
-							Manage
-						</Button>
-					)}
-
-					{this.renderSelect()}
-					{this.renderDrawer()}
-				</div>
-			);
-		} else {
-			if (historyTrack) {
-				return (
-					<div class="form-group">
-						{showManageButton && (
-							<Button onClick={this.showDrawer} type="link">
-								Manage
-							</Button>
-						)}
-						{hasChange && action !== 'add' && this.renderPopover()}
-						{this.renderInput()}
-						{this.renderDrawer()}
-					</div>
-				);
-			}
-
-			return (
-				<div class="form-group">
-					{showManageButton && (
-						<Button onClick={this.showDrawer} type="link">
-							Manage
-						</Button>
-					)}
-					{this.renderSelect()}
-					{this.renderDrawer()}
-				</div>
-			);
-		}
-
-		return null;
+		return (
+			<Form.Item {...formItemCommonProps}>
+				{showManageButton && (
+					<Button onClick={this.showDrawer} type="link">
+						Manage
+					</Button>
+				)}
+				{historyTrack && hasChange && action !== 'add' && this.renderPopover()}
+				{this.renderSelect()}
+				{showManageButton && this.renderDrawer()}
+			</Form.Item>
+		);
 	}
 }
