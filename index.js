@@ -1,13 +1,6 @@
 import InputDate from '@volenday/input-date';
 import React, { Component } from 'react';
-// import Select from 'react-select';
 import { Button, Drawer, Form, Popover, Select } from 'antd';
-
-const { Option } = Select;
-
-//lodash
-import omit from 'lodash/omit';
-import keyBy from 'lodash/keyBy';
 
 import './styles.css';
 
@@ -17,25 +10,6 @@ export default class InputSelect extends Component {
 		isPopoverVisible: false,
 		isDrawerVisible: false
 	};
-
-	getValue() {
-		const { value, options = [] } = this.props;
-
-		let optionList = [];
-		if (options.length) {
-			optionList = options.map(option => {
-				return omit(option, 'Id');
-			});
-		}
-
-		let listObject = keyBy(optionList, 'value');
-
-		if (Array.isArray(value)) {
-			return value.map(d => (listObject[d] ? listObject[d] : null));
-		} else {
-			return value ? (listObject[value] ? listObject[value] : null) : null;
-		}
-	}
 
 	renderSelect() {
 		const {
@@ -50,35 +24,24 @@ export default class InputSelect extends Component {
 			value = ''
 		} = this.props;
 
-		let optionList = [];
-		if (options.length) {
-			optionList = options.map(option => {
-				return omit(option, 'Id');
-			});
-		}
-
 		return (
 			<Select
 				allowClear
-				showSearch
 				disabled={disabled}
 				mode={multiple ? 'multiple' : 'default'}
 				onChange={e => {
-					this.setState({
-						hasChange: action === 'add' ? false : list[e].value != e ? true : false
-					});
+					this.setState({ hasChange: action === 'add' ? false : true });
 					onChange(id, e);
 				}}
 				placeholder={placeholder || label || id}
+				showSearch
 				style={{ width: '100%' }}
 				value={value ? value : []}>
-				{optionList.map(e => {
-					return (
-						<Option key={e.value} value={e.value}>
-							{e.label}
-						</Option>
-					);
-				})}
+				{options.map(e => (
+					<Select.Option key={e.value} value={e.value}>
+						{e.label}
+					</Select.Option>
+				))}
 			</Select>
 		);
 	}
