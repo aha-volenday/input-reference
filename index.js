@@ -1,13 +1,6 @@
 import InputDate from '@volenday/input-date';
-import { diff } from 'deep-object-diff';
 import React, { Component } from 'react';
-import Select from 'react-select';
-import { Button, Drawer, Form, Popover } from 'antd';
-
-//lodash
-import size from 'lodash/size';
-import omit from 'lodash/omit';
-import keyBy from 'lodash/keyBy';
+import { Button, Drawer, Form, Popover, Select } from 'antd';
 
 import './styles.css';
 
@@ -17,25 +10,6 @@ export default class InputSelect extends Component {
 		isPopoverVisible: false,
 		isDrawerVisible: false
 	};
-
-	getValue() {
-		const { value, options = [] } = this.props;
-
-		let optionList = [];
-		if (options.length) {
-			optionList = options.map(option => {
-				return omit(option, 'Id');
-			});
-		}
-
-		let listObject = keyBy(optionList, 'value');
-
-		if (Array.isArray(value)) {
-			return value.map(d => (listObject[d] ? listObject[d] : null));
-		} else {
-			return value ? (listObject[value] ? listObject[value] : null) : null;
-		}
-	}
 
 	renderSelect() {
 		const {
@@ -50,35 +24,25 @@ export default class InputSelect extends Component {
 			value = ''
 		} = this.props;
 
-		let optionList = [];
-		if (options.length) {
-			optionList = options.map(option => {
-				return omit(option, 'Id');
-			});
-		}
-
-		const listObject = keyBy(optionList, 'value');
-
 		return (
 			<Select
-				isDisabled={disabled}
-				isMulti={multiple}
+				allowClear
+				disabled={disabled}
+				mode={multiple ? 'multiple' : 'default'}
 				onChange={e => {
-					if (Array.isArray(e)) {
-						onChange(id, e.length ? e.map(d => d.value) : null);
-					} else {
-						onChange(id, e ? e.value : null);
-					}
-
-					this.setState({
-						hasChange: action === 'add' ? false : size(diff(listObject[value], e)) ? true : false
-					});
+					this.setState({ hasChange: action === 'add' ? false : true });
+					onChange(id, e);
 				}}
-				options={optionList}
 				placeholder={placeholder || label || id}
-				value={this.getValue()}
-				styles={{ menu: provided => ({ ...provided, zIndex: 999 }) }}
-			/>
+				showSearch
+				style={{ width: '100%' }}
+				value={value ? value : []}>
+				{options.map(e => (
+					<Select.Option key={e.value} value={e.value}>
+						{e.label}
+					</Select.Option>
+				))}
+			</Select>
 		);
 	}
 
