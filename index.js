@@ -1,11 +1,11 @@
 import InputDate from '@volenday/input-date';
-import { diff } from 'deep-object-diff';
 import React, { Component } from 'react';
-import Select from 'react-select';
-import { Button, Drawer, Form, Popover } from 'antd';
+// import Select from 'react-select';
+import { Button, Drawer, Form, Popover, Select } from 'antd';
+
+const { Option } = Select;
 
 //lodash
-import size from 'lodash/size';
 import omit from 'lodash/omit';
 import keyBy from 'lodash/keyBy';
 
@@ -57,28 +57,29 @@ export default class InputSelect extends Component {
 			});
 		}
 
-		const listObject = keyBy(optionList, 'value');
-
 		return (
 			<Select
-				isDisabled={disabled}
-				isMulti={multiple}
+				allowClear
+				showSearch
+				disabled={disabled}
+				mode={multiple ? 'multiple' : 'default'}
 				onChange={e => {
-					if (Array.isArray(e)) {
-						onChange(id, e.length ? e.map(d => d.value) : null);
-					} else {
-						onChange(id, e ? e.value : null);
-					}
-
 					this.setState({
-						hasChange: action === 'add' ? false : size(diff(listObject[value], e)) ? true : false
+						hasChange: action === 'add' ? false : list[e].value != e ? true : false
 					});
+					onChange(id, e);
 				}}
-				options={optionList}
 				placeholder={placeholder || label || id}
-				value={this.getValue()}
-				styles={{ menu: provided => ({ ...provided, zIndex: 999 }) }}
-			/>
+				style={{ width: '100%' }}
+				value={value ? value : []}>
+				{optionList.map(e => {
+					return (
+						<Option key={e.value} value={e.value}>
+							{e.label}
+						</Option>
+					);
+				})}
+			</Select>
 		);
 	}
 
