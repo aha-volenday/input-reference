@@ -25,7 +25,7 @@ export default class InputSelect extends Component {
 				allowClear
 				disabled={disabled}
 				mode={multiple ? 'multiple' : 'default'}
-				onChange={e => onChange(id, e)}
+				onChange={e => onChange({ target: { name: id, value: e } }, id, e)}
 				placeholder={placeholder || label || id}
 				showSearch
 				style={{ width: '100%' }}
