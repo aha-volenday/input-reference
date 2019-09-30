@@ -1,6 +1,6 @@
 {
 	"name": "@volenday/input-reference",
-	"version": "0.1.4",
+	"version": "0.1.6",
 	"main": "dist/index.min.js",
 	"repository": "https://jeromemiranda@bitbucket.org/volenday-dev/input-reference",
 	"author": "Volenday <developers@volenday.com>",
@@ -12,12 +12,12 @@
 		"prepublishOnly": "webpack --progress -p"
 	},
 	"peerDependencies": {
-		"antd": "~3.23.3",
-		"react": "^16.9.0"
+		"antd": "~3.23.5",
+		"react": "~16.10.1"
 	},
 	"dependencies": {
-		"antd": "~3.23.4",
-		"react": "^16.9.0",
+		"antd": "~3.23.5",
+		"react": "~16.10.1",
 		"webpack": "~4.41.0"
 	},
 	"devDependencies": {
