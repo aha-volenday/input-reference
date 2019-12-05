@@ -22,7 +22,6 @@ export default class InputSelect extends Component {
 
 		return (
 			<Select
-				allowClear
 				disabled={disabled}
 				filterOption={(input, { props }) => props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
 				mode={multiple ? 'multiple' : 'default'}
