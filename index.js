@@ -1,25 +1,27 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button, Drawer, Form, Select } from 'antd';
 
 import './styles.css';
 
-export default class InputSelect extends Component {
-	state = {
-		isDrawerVisible: false
-	};
+export default ({
+	children,
+	disabled = false,
+	error = null,
+	extra = null,
+	options = [],
+	id,
+	label = '',
+	multiple,
+	onChange,
+	placeholder = '',
+	required = false,
+	showManageButton = false,
+	value = '',
+	withLabel = false
+}) => {
+	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
-	renderSelect() {
-		const {
-			disabled = false,
-			options = [],
-			id,
-			label = '',
-			multiple,
-			onChange,
-			placeholder = '',
-			value = ''
-		} = this.props;
-
+	const renderSelect = () => {
 		return (
 			<Select
 				disabled={disabled}
@@ -38,61 +40,39 @@ export default class InputSelect extends Component {
 				))}
 			</Select>
 		);
-	}
-
-	closeDrawer = () => {
-		this.setState({ isDrawerVisible: false });
 	};
 
-	showDrawer = () => {
-		this.setState({ isDrawerVisible: true });
-	};
-
-	renderDrawer = () => {
-		const { children } = this.props;
-		const { isDrawerVisible } = this.state;
-
+	const renderDrawer = () => {
 		return (
-			<Drawer title="Manage" width={720} visible={isDrawerVisible} onClose={this.closeDrawer}>
+			<Drawer title="Manage" width={720} visible={isDrawerVisible} onClose={() => setIsDrawerVisible(false)}>
 				{children}
 			</Drawer>
 		);
 	};
 
-	render() {
-		const {
-			error = null,
-			extra = null,
-			label = '',
-			required = false,
-			showManageButton = false,
-			withLabel = false
-		} = this.props;
+	const formItemCommonProps = {
+		colon: false,
+		help: error ? error : '',
+		label: withLabel ? (
+			<>
+				<div style={{ float: 'right' }}>{extra}</div> <span class="label">{label}</span>
+			</>
+		) : (
+			false
+		),
+		required,
+		validateStatus: error ? 'error' : 'success'
+	};
 
-		const formItemCommonProps = {
-			colon: false,
-			help: error ? error : '',
-			label: withLabel ? (
-				<>
-					<div style={{ float: 'right' }}>{extra}</div> <span class="label">{label}</span>
-				</>
-			) : (
-				false
-			),
-			required,
-			validateStatus: error ? 'error' : 'success'
-		};
-
-		return (
-			<Form.Item {...formItemCommonProps}>
-				{showManageButton && (
-					<Button onClick={this.showDrawer} type="link">
-						Manage
-					</Button>
-				)}
-				{this.renderSelect()}
-				{showManageButton && this.renderDrawer()}
-			</Form.Item>
-		);
-	}
-}
+	return (
+		<Form.Item {...formItemCommonProps}>
+			{showManageButton && (
+				<Button onClick={() => setIsDrawerVisible(true)} type="link">
+					Manage
+				</Button>
+			)}
+			{renderSelect()}
+			{showManageButton && renderDrawer()}
+		</Form.Item>
+	);
+};
