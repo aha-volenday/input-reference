@@ -11,6 +11,7 @@ export default ({
 	options = [],
 	id,
 	label = '',
+	loading = false,
 	multiple,
 	onChange,
 	placeholder = '',
@@ -26,6 +27,7 @@ export default ({
 			<Select
 				disabled={disabled}
 				filterOption={(input, { props }) => props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+				loading={loading}
 				mode={multiple ? 'multiple' : 'default'}
 				onChange={e => onChange({ target: { name: id, value: e } }, id, e)}
 				optionFilterProp="children"
