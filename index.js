@@ -57,7 +57,15 @@ export default ({
 		help: error ? error : '',
 		label: withLabel ? (
 			<>
-				<div style={{ float: 'right' }}>{extra}</div> <span class="label">{label}</span>
+				<div style={{ float: 'right' }}>{extra}</div>{' '}
+				<div class="label">
+					<span>{label}</span>{' '}
+					{showManageButton && (
+						<Button onClick={() => setIsDrawerVisible(true)} type="link">
+							(Manage)
+						</Button>
+					)}
+				</div>
 			</>
 		) : (
 			false
@@ -68,11 +76,6 @@ export default ({
 
 	return (
 		<Form.Item {...formItemCommonProps}>
-			{showManageButton && (
-				<Button onClick={() => setIsDrawerVisible(true)} type="link">
-					Manage
-				</Button>
-			)}
 			{renderSelect()}
 			{showManageButton && renderDrawer()}
 		</Form.Item>
