@@ -18,7 +18,8 @@ export default ({
 	required = false,
 	showManageButton = false,
 	value = '',
-	withLabel = false
+	withLabel = false,
+	relatedEntityModalClose
 }) => {
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
@@ -46,7 +47,10 @@ export default ({
 
 	const renderDrawer = () => {
 		return (
-			<Drawer title="Manage" width={720} visible={isDrawerVisible} onClose={() => setIsDrawerVisible(false)}>
+			<Drawer title="Manage" width={720} visible={isDrawerVisible} onClose={() => {
+				setIsDrawerVisible(false);
+				relatedEntityModalClose();
+			}}>
 				{children}
 			</Drawer>
 		);
