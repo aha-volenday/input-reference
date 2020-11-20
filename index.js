@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Drawer, Form, Select } from 'antd';
+import { Button, Form, Select } from 'antd';
 
 import './styles.css';
+
+const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
 export default ({
 	children,
@@ -46,11 +48,17 @@ export default ({
 	};
 
 	const renderDrawer = () => {
+		const { Drawer } = require('antd');
+
 		return (
-			<Drawer title="Manage" width={720} visible={isDrawerVisible} onClose={() => {
-				setIsDrawerVisible(false);
-				relatedEntityModalClose();
-			}}>
+			<Drawer
+				title="Manage"
+				width={720}
+				visible={isDrawerVisible}
+				onClose={() => {
+					setIsDrawerVisible(false);
+					relatedEntityModalClose();
+				}}>
 				{children}
 			</Drawer>
 		);
@@ -80,8 +88,14 @@ export default ({
 
 	return (
 		<Form.Item {...formItemCommonProps}>
-			{renderSelect()}
-			{showManageButton && renderDrawer()}
+			{browser ? (
+				<>
+					{renderSelect()}
+					{showManageButton && renderDrawer()}
+				</>
+			) : (
+				<Skeleton active paragraph={{ rows: 1, width: '100%' }} title={false} />
+			)}
 		</Form.Item>
 	);
 };
