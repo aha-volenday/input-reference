@@ -73,9 +73,15 @@ export default ({
 				<div class="label">
 					<span>{label}</span>{' '}
 					{showManageButton && (
-						<Button onClick={() => setIsDrawerVisible(true)} type="link">
+						<a
+							className="ant-btn ant-btn-link"
+							onClick={e => {
+								e.preventDefault();
+								setIsDrawerVisible(true);
+							}}
+							type="link">
 							(Manage)
-						</Button>
+						</a>
 					)}
 				</div>
 			</>
