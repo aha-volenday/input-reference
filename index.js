@@ -3,7 +3,9 @@ import { Button, Form, Select } from 'antd';
 
 import './styles.css';
 
-const browser = typeof process.browser !== 'undefined' ? process.browser : true;
+const browser = typeof window !== 'undefined' ? true : false;
+
+if (browser) require('./styles.css');
 
 export default ({
 	children,
