@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Select } from 'antd';
-
-import './styles.css';
+import { Form, Select } from 'antd';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
