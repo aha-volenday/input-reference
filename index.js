@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Form, Select } from 'antd';
+import { Form, Select } from 'antd';
 
-import './styles.css';
+const browser = typeof window !== 'undefined' ? true : false;
 
-const browser = typeof process.browser !== 'undefined' ? process.browser : true;
+if (browser) require('./styles.css');
 
 export default ({
 	children,
