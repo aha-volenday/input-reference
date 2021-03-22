@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Select } from 'antd';
+import { orderBy } from 'lodash';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
@@ -38,7 +39,7 @@ export default ({
 				showSearch
 				style={{ width: '100%' }}
 				value={value ? value : []}>
-				{options.map(e => (
+				{orderBy(options, ['label'], ['asc']).map(e => (
 					<Select.Option key={e.value} value={e.value}>
 						{e.label}
 					</Select.Option>
