@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Select } from 'antd';
+import { Tooltip } from 'antd';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
@@ -19,6 +20,7 @@ export default ({
 	placeholder = '',
 	required = false,
 	showManageButton = false,
+	toolTip = {},
 	value = '',
 	withLabel = false,
 	relatedEntityModalClose
@@ -26,7 +28,7 @@ export default ({
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
 	const renderSelect = () => {
-		return (
+		const select = (
 			<Select
 				disabled={disabled}
 				filterOption={(input, { props }) => props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -45,12 +47,14 @@ export default ({
 				))}
 			</Select>
 		);
+
+		return Object.keys(toolTip).length === 0 ? select : <Tooltip {...toolTip}>{select}</Tooltip>;
 	};
 
 	const renderDrawer = () => {
 		const { Drawer } = require('antd');
 
-		return (
+		const drawer = (
 			<Drawer
 				title="Manage"
 				width={720}
@@ -62,6 +66,8 @@ export default ({
 				{children}
 			</Drawer>
 		);
+
+		return Object.keys(toolTip).length === 0 ? drawer : <Tooltip {...toolTip}>{drawer}</Tooltip>;
 	};
 
 	const formItemCommonProps = {
