@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Select } from 'antd';
-import { Tooltip } from 'antd';
+import { Form, Select, Tooltip } from 'antd';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
