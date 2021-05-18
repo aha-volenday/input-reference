@@ -74,7 +74,7 @@ export default ({
 				<div style={{ float: 'right' }}>{extra}</div>{' '}
 				<div class="label">
 					<span>
-						{label}
+						{label}{' '}
 						{toolTip && (
 							<Tooltip title={toolTip}>
 								{' '}
