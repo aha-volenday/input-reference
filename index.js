@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Select } from 'antd';
+import { Form, Select, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
@@ -19,6 +20,7 @@ export default ({
 	placeholder = '',
 	required = false,
 	showManageButton = false,
+	toolTip = '',
 	value = '',
 	withLabel = false,
 	relatedEntityModalClose
@@ -71,7 +73,15 @@ export default ({
 			<>
 				<div style={{ float: 'right' }}>{extra}</div>{' '}
 				<div class="label">
-					<span>{label}</span>{' '}
+					<span>
+						{label}{' '}
+						{toolTip && (
+							<Tooltip title={toolTip}>
+								{' '}
+								<QuestionCircleOutlined />
+							</Tooltip>
+						)}
+					</span>{' '}
 					{showManageButton && (
 						<a
 							className="ant-btn ant-btn-link"
