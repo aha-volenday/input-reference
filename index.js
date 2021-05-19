@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Select, Tooltip } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Checkbox, Col, Form, Input, List, Row, Select, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const browser = typeof window !== 'undefined' ? true : false;
@@ -7,8 +7,11 @@ const browser = typeof window !== 'undefined' ? true : false;
 if (browser) require('./styles.css');
 
 export default ({
+	allowSearch = true,
 	children,
 	disabled = false,
+	disabledItems = [],
+	dynamicHeight = false,
 	error = null,
 	extra = null,
 	options = [],
@@ -23,9 +26,24 @@ export default ({
 	toolTip = '',
 	value = '',
 	withLabel = false,
-	relatedEntityModalClose
+	relatedEntityModalClose,
+	type = 'dropdown'
 }) => {
+	const [listOptions, setListOptions] = useState([]);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+
+	const handleSearch = useCallback(
+		(val = '') => {
+			if (!val) return setListOptions(options);
+			const newOptions = options.filter(d => d.label.match(new RegExp(val, 'i')));
+			setListOptions(newOptions);
+		},
+		[listOptions]
+	);
+
+	useEffect(() => {
+		handleSearch();
+	}, []);
 
 	const renderSelect = () => {
 		return (
@@ -46,6 +64,60 @@ export default ({
 					</Select.Option>
 				))}
 			</Select>
+		);
+	};
+
+	const renderListComponent = () => {
+		const height = dynamicHeight ? 'auto' : 234;
+
+		return (
+			<div className="listComponentWrapper">
+				<Row gutter={4}>
+					{allowSearch && (
+						<Col span={24} style={{ paddingRight: '0px !important' }}>
+							<Input.Search
+								size="small"
+								placeholder="Search.."
+								onSearch={e => handleSearch(e)}
+								onKeyUp={e => handleSearch(e.target.value)}
+							/>
+						</Col>
+					)}
+					<Col span={24} className="listWrapper" style={{ height }}>
+						<List
+							itemLayout="horizontal"
+							dataSource={listOptions}
+							renderItem={d => (
+								<List.Item style={{ paddingTop: 3, paddingBottom: 3 }}>
+									<Checkbox
+										className="table-font-size"
+										disabled={disabledItems.includes(d.value) ? true : false}
+										style={{ fontSize: '8pt' }}
+										onChange={e => {
+											const { checked, value: newValue } = e.target;
+
+											const finalValue = checked
+												? multiple
+													? [...value, newValue]
+													: newValue
+												: multiple
+												? value.filter(d => d !== newValue)
+												: '';
+
+											onChange({ target: { name: id, value: finalValue } }, id, finalValue);
+										}}
+										value={d.value}
+										checked={value ? value.includes(d.value) : false}>
+										{d.label}
+									</Checkbox>
+								</List.Item>
+							)}
+							rowKey={e => `${id}-${e.value}`}
+							size="small"
+						/>
+					</Col>
+				</Row>
+			</div>
 		);
 	};
 
@@ -106,7 +178,7 @@ export default ({
 		<Form.Item {...formItemCommonProps}>
 			{browser ? (
 				<>
-					{renderSelect()}
+					{type === 'dropdown' ? renderSelect() : renderListComponent()}
 					{showManageButton && renderDrawer()}
 				</>
 			) : (
