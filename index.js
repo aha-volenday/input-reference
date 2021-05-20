@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Checkbox, Col, Form, Input, List, Row, Select, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -31,19 +31,23 @@ export default ({
 }) => {
 	const [listOptions, setListOptions] = useState([]);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+	const [searchValueProp, setSearchValueProp] = useState({ value: '' });
+	const searchVal = useRef('');
 
 	const handleSearch = useCallback(
 		(val = '') => {
-			if (!val) return setListOptions(options);
-			const newOptions = options.filter(d => d.label.match(new RegExp(val, 'i')));
+			searchVal.current = val;
+			const newOptions = options.filter(d => d.label.match(new RegExp(searchVal.current, 'i')));
 			setListOptions(newOptions);
 		},
 		[listOptions]
 	);
 
 	useEffect(() => {
-		handleSearch();
-	}, []);
+		setSearchValueProp({ value: '' });
+		searchVal.current = '';
+		setListOptions(options);
+	}, [value]);
 
 	const renderSelect = () => {
 		return (
@@ -79,7 +83,11 @@ export default ({
 								size="small"
 								placeholder="Search.."
 								onSearch={e => handleSearch(e)}
-								onKeyUp={e => handleSearch(e.target.value)}
+								onFocus={() => setSearchValueProp({})}
+								onKeyUp={e => {
+									handleSearch(e.target.value);
+								}}
+								{...searchValueProp}
 							/>
 						</Col>
 					)}
