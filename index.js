@@ -91,7 +91,9 @@ export default ({
 								<List.Item style={{ paddingTop: 3, paddingBottom: 3 }}>
 									<Checkbox
 										className="table-font-size"
-										disabled={disabledItems.includes(d.value) ? true : false}
+										disabled={
+											disabledItems ? (disabledItems.includes(d.value) ? true : false) : false
+										}
 										style={{ fontSize: '8pt' }}
 										onChange={e => {
 											const { checked, value: newValue } = e.target;
@@ -144,7 +146,7 @@ export default ({
 		label: withLabel ? (
 			<>
 				<div style={{ float: 'right' }}>{extra}</div>{' '}
-				<div class="label">
+				<div className="label">
 					<span>
 						{label}{' '}
 						{toolTip && (
