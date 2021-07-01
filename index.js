@@ -43,7 +43,7 @@ export default ({
 						? options
 						: uniq([
 								...options.slice(0, listComponentLimit),
-								...(value && options.filter(d => value.includes(d.value)))
+								...(value ? options.filter(d => value.includes(d.value)) : [])
 						  ])
 				);
 			const newOptions = options.filter(d => d.label.match(new RegExp(val, 'i')));
