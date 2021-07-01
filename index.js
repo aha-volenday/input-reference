@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Checkbox, Col, Form, Input, List, Row, Select, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { uniq } from 'lodash';
 
 const browser = typeof window !== 'undefined' ? true : false;
 
@@ -18,6 +19,7 @@ export default ({
 	id,
 	inlineError = true,
 	label = '',
+	listComponentLimit = 'All',
 	loading = false,
 	multiple,
 	onChange,
@@ -35,11 +37,19 @@ export default ({
 
 	const handleSearch = useCallback(
 		(val = '') => {
-			if (!val) return setListOptions(options);
+			if (!val)
+				return setListOptions(
+					listComponentLimit === 'All'
+						? options
+						: uniq([
+								...options.slice(0, listComponentLimit),
+								...(value && options.filter(d => value.includes(d.value)))
+						  ])
+				);
 			const newOptions = options.filter(d => d.label.match(new RegExp(val, 'i')));
 			setListOptions(newOptions);
 		},
-		[listOptions]
+		[JSON.stringify(listOptions)]
 	);
 
 	useEffect(() => {
